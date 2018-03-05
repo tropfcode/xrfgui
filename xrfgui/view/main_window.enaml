@@ -1,0 +1,19 @@
+from enaml.widgets.api import (Container, PushButton, Label,
+                               Form, Field, FileDialogEx, DockItem,
+                               DockArea, CheckBox, ComboBox, RadioButton,
+                               ScrollArea, Window, GroupBox, MultilineField, MPLCanvas)
+from enaml.layout.api import hbox, vbox, HSplitLayout, VSplitLayout, spacer, grid
+from enaml.core.api import Include, Looper
+from enaml.layout.geometry import Box
+from enaml.stdlib.fields import FloatField
+from enaml.stdlib.fields import IntField as DefaultIntField
+import os
+import numpy as np
+from model.plotmodel import PlotModel
+
+enamldef Main(Window): main_window:
+    attr plot
+    Container:
+        MPLCanvas: canvas:
+            toolbar_visible = True
+            figure << plot.fig
