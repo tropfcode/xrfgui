@@ -1,6 +1,7 @@
 *.pyc
-*_ipynb_checkpoints*
+*ipynb_checkpoints*
 *__pycache__*
 *.gz
 *.pypirc
 *.log
+*__enaml__*
