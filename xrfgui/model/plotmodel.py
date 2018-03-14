@@ -24,5 +24,6 @@ class PlotModel(Atom):
         
     def plot(self, data):
         self.im.set_data(data)
+        self.im.autoscale()
         self.im.set_extent((0, data.shape[1], data.shape[0], 0))
         self.fig.canvas.draw()

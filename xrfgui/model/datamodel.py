@@ -15,6 +15,7 @@ class DataListModel(Atom):
         try:
             data = Data(np.array(Image.open(path)), path)
             self.data_list.append(data)
+            print('SUCCESSFUL IMAGE LOAD', len(self.data_list))
         except IOError as e:
             logger.error('I/O error({0}): {1}'.format(e.errno, e.strerror))
             logger.error('Select image file (.jpeg, .tiff, etc.)')

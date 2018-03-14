@@ -26,3 +26,4 @@ enamldef Main(MainWindow): main_window:
             Image:
                 plot = main_window.plot
                 name = 'image'
+            
