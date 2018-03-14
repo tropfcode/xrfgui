@@ -1,8 +1,8 @@
 from enaml.widgets.api import (Container, PushButton, Label,
                                Form, Field, FileDialogEx, DockItem,
                                DockArea, CheckBox, ComboBox, RadioButton,
-                               ScrollArea, Window, GroupBox, MultilineField, MPLCanvas)
-from enaml.layout.api import hbox, vbox, HSplitLayout, VSplitLayout, spacer, grid
+                               ScrollArea, MainWindow, GroupBox, MultilineField, MPLCanvas)
+from enaml.layout.api import hbox, vbox, HSplitLayout, VSplitLayout, spacer, grid, TabLayout
 from enaml.core.api import Include, Looper
 from enaml.layout.geometry import Box
 from enaml.stdlib.fields import FloatField
@@ -10,10 +10,19 @@ from enaml.stdlib.fields import IntField as DefaultIntField
 import os
 import numpy as np
 from model.plotmodel import PlotModel
+from view.dataio import Dataio
+from view.image_view import Image
 
-enamldef Main(Window): main_window:
+enamldef Main(MainWindow): main_window:
+    attr data_list
     attr plot
     Container:
-        MPLCanvas: canvas:
-            toolbar_visible = True
-            figure << plot.fig
+        DockArea:
+            layout = HSplitLayout(TabLayout('data_io'), 'image')
+            Dataio:
+                plot = main_window.plot
+                data_list = main_window.data_list
+                name = 'data_io'
+            Image:
+                plot = main_window.plot
+                name = 'image'
