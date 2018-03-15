@@ -1,4 +1,4 @@
-from enaml.widgets.api import (Container, PushButton, Label, Slider,
+from enaml.widgets.api import (Container, PushButton, Label, Slider, GroupBox,
                                Form, Field, FileDialogEx, DockItem,
                                DockArea, CheckBox, ComboBox, RadioButton,
                                ScrollArea, Window, GroupBox, MultilineField, MPLCanvas)
@@ -11,14 +11,63 @@ import os
 import numpy as np
 from model.plotmodel import PlotModel
 
-enamldef Image(DockItem): data_view:
+enamldef Image(DockItem): image_view:
     attr plot
     attr data_list
     Container:   
+        constraints = [
+            vbox(
+                canvas,
+                hbox(augment_box),
+                slider
+            )
+        ]
         MPLCanvas: canvas:
             toolbar_visible = True
             figure << plot.fig
             
+        GroupBox: augment_box:
+            title = 'Image Augmentation'
+            Container:
+                constraints = [
+                    hbox(norm_check, align_check, make_norm_check, make_align_check)
+                ]
+                    
+                CheckBox: norm_check:
+                    text = 'Normalize'
+                    clicked ::
+                        if checked:
+                            print('norm box checked')
+                        else:
+                            print('norm box not checked')
+                            
+                CheckBox: align_check:
+                    text = 'Align'
+                    clicked ::
+                        if checked:
+                            print('norm box checked')
+                        else:
+                            print('norm box not checked')
+                        
+                CheckBox: make_norm_check:
+                    text = 'Make Norm Data'
+                    clicked ::
+                        if checked:
+                            if image_view.data_list.length > 0:
+                                for data in image_view.data_list.data_list:
+                                    data.add_align_data(array=data_list.get_data(value-1).plot_data)
+                        else:
+                            print('norm box not checked')
+                            
+                CheckBox: make_align_check:
+                    text = 'Make Align Data'
+                    clicked ::
+                        if checked:
+                            print('norm box checked')
+                        else:
+                            print('norm box not checked')
+                        
+                    
         Slider: slider:
             constraints = [width == canvas.width]
             tracking = True

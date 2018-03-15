@@ -35,9 +35,33 @@ class DataListModel(Atom):
 class Data(Atom):
     raw_data = Typed(np.ndarray)
     plot_data = Typed(np.ndarray)
+    norm_data = Typed(np.ndarray)
+    align_data = Typed(np.ndarray)
     file_name = Str()
     
     def __init__(self, raw_data, file_name):
         self.raw_data = raw_data
         self.file_name = file_name
-        self.plot_data = np.copy(raw_data)
+        self.plot_data = np.ma.copy(raw_data)
+        self.norm_data = np.ma.zeros((4,4))
+        self.align_data = np.ma.zeros((4,4))
+        
+    def add_norm_data(self, path=None, array=None):
+        try:
+            if path != None:
+                norm_data = np.array(Image.open(path))
+                self.norm_data = np.ma.masked_where(norm_data <= 0.0, norm_data)
+            if array != None:
+                self.norm_data = np.ma.masked_where(array<=0.0, array)
+        except:
+            print('bad path')
+    
+    def add_align_data(self, path=None, array=None):
+        try:
+            if path != None:
+                align_data = np.array(Image.open(path))
+                self.align_data = np.ma.copy(align_data)
+            if array != None:
+                self.align_data = np.ma.copy(array)
+        except:
+            print('bad path')

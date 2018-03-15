@@ -12,17 +12,24 @@ import numpy as np
 from model.plotmodel import PlotModel
 from view.dataio import Dataio
 from view.image_view import Image
+from view.analysis_view import Analysis
 
 enamldef Main(MainWindow): main_window:
     attr data_list
     attr plot
     Container:
         DockArea:
-            layout = HSplitLayout(TabLayout('data_io'), 'image')
+            layout = HSplitLayout(TabLayout('data_io', 'analysis_view'), 'image')
             Dataio:
                 plot = main_window.plot
                 data_list = main_window.data_list
                 name = 'data_io'
+                
+            Analysis:
+                plot = main_window.plot
+                data_list = main_window.data_list
+                name = 'analysis_view'
+               
             Image:
                 plot = main_window.plot
                 data_list = main_window.data_list
