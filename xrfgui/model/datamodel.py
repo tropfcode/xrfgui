@@ -19,8 +19,8 @@ class DataListModel(Atom):
             self.data_list.append(data)
             self.length += 1
             print('SUCCESSFUL IMAGE LOAD', len(self.data_list))
-        except IOError as e:
-            logger.error('I/O error({0}): {1}'.format(e.errno, e.strerror))
+        except:
+            logger.error('I/O error')
             logger.error('Select image file (.jpeg, .tiff, etc.)')
     
     def get_data(self, index=0):
@@ -29,8 +29,7 @@ class DataListModel(Atom):
         else:
             return self.data_list[index]
         
-    def get_length(self):
-        return len(self.data_list)
+    
         
         
 class Data(Atom):

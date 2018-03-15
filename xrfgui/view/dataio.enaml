@@ -1,0 +1,68 @@
+from enaml.widgets.api import (Container, PushButton, Label,
+                               Form, Field, FileDialogEx, DockItem,
+                               DockArea, CheckBox, ComboBox, RadioButton,
+                               ScrollArea, Window, GroupBox, MultilineField, MPLCanvas)
+from enaml.layout.api import hbox, vbox, HSplitLayout, VSplitLayout, spacer, grid
+from enaml.core.api import Include, Looper
+from enaml.layout.geometry import Box
+from enaml.stdlib.fields import FloatField
+from enaml.stdlib.fields import IntField as DefaultIntField
+import os
+import numpy as np
+
+enamldef Dataio(DockItem): data_view:
+    attr data_list
+    attr plot
+    attr path_list : list = ['']
+    attr directory : str = ''
+    title = 'Data IO'
+    Container:
+        constraints = [
+            vbox(
+                hbox(single_file_button, single_file_field, single_file_plot),
+                hbox(directory_button, directory_field, directory_plot)
+                )
+            
+        ]
+        
+        PushButton: single_file_button:
+            text = 'Select Data'
+            clicked ::
+                path_list = FileDialogEx.get_open_file_names(data_view)
+                if path_list:
+                    data_view.path_list = path_list
+                    
+        Field: single_file_field:
+            read_only = True
+            text << data_view.path_list[0]
+            
+        PushButton: single_file_plot:
+            text = 'Plot Data'
+            clicked ::
+                for path in data_view.path_list:
+                    data_list.add_data(path)
+                if data_list.length == 1:
+                    index = len(data_list.data_list)-1
+                    plot.plot(data_list.get_data(index).plot_data)
+                    
+        PushButton: directory_button:
+            text = 'Select Directory'
+            clicked ::
+                directory = FileDialogEx.get_existing_directory(data_view)
+                if directory:
+                    data_view.directory = directory
+        
+        Field: directory_field:
+            read_only = True
+            text << data_view.directory
+        
+        PushButton: directory_plot:
+            text = 'Plot Directory'
+            clicked ::
+                try:
+                    for path in sorted(os.listdir(data_view.directory)):
+                        path = data_view.directory+'/'+path
+                        data_view.data_list.add_data(path)
+                except:
+                    print('didnt work')
+                
