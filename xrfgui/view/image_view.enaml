@@ -1,0 +1,32 @@
+from enaml.widgets.api import (Container, PushButton, Label, Slider,
+                               Form, Field, FileDialogEx, DockItem,
+                               DockArea, CheckBox, ComboBox, RadioButton,
+                               ScrollArea, Window, GroupBox, MultilineField, MPLCanvas)
+from enaml.layout.api import hbox, vbox, HSplitLayout, VSplitLayout, spacer, grid
+from enaml.core.api import Include, Looper
+from enaml.layout.geometry import Box
+from enaml.stdlib.fields import FloatField
+from enaml.stdlib.fields import IntField as DefaultIntField
+import os
+import numpy as np
+from model.plotmodel import PlotModel
+
+enamldef Image(DockItem): data_view:
+    attr plot
+    attr data_list
+    Container:   
+        MPLCanvas: canvas:
+            toolbar_visible = True
+            figure << plot.fig
+            
+        Slider: slider:
+            constraints = [width == canvas.width]
+            tracking = True
+            minimum << 0 if data_list.length == 0 else 1
+            maximum := data_list.length
+            maximum ::
+                if maximum == 0:
+                    pass
+            value ::
+                plot.plot(data_list.get_data(value-1).plot_data)
+           

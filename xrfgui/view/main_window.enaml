@@ -25,5 +25,6 @@ enamldef Main(MainWindow): main_window:
                 name = 'data_io'
             Image:
                 plot = main_window.plot
+                data_list = main_window.data_list
                 name = 'image'
             

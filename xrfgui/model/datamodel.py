@@ -6,15 +6,18 @@ from atom.api import Atom, Str, observe, Typed, Dict, List, Int, Enum, Float, Bo
 
 class DataListModel(Atom):
     data_list = List()
+    length = Int()
     
     def __init__(self):
         self.data_list = []
+        self.length = 0
     
     def add_data(self, path):
         logger = logging.getLogger('program_log')
         try:
             data = Data(np.array(Image.open(path)), path)
             self.data_list.append(data)
+            self.length += 1
             print('SUCCESSFUL IMAGE LOAD', len(self.data_list))
         except IOError as e:
             logger.error('I/O error({0}): {1}'.format(e.errno, e.strerror))
@@ -25,6 +28,9 @@ class DataListModel(Atom):
             return
         else:
             return self.data_list[index]
+        
+    def get_length(self):
+        return len(self.data_list)
         
         
 class Data(Atom):
