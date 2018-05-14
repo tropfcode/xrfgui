@@ -55,7 +55,7 @@ enamldef Image(DockItem): image_view:
                         if checked:
                             if image_view.data_list.length > 0:
                                 for data in image_view.data_list.data_list:
-                                    data.add_align_data(array=data_list.get_data(value-1).plot_data)
+                                    data.add_align_data(array=data_list.get_data(slider.value-1).plot_data)
                         else:
                             print('norm box not checked')
                             

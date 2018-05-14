@@ -21,10 +21,11 @@ class DataListModel(Atom):
             print('SUCCESSFUL IMAGE LOAD', len(self.data_list))
         except:
             logger.error('I/O error')
-            logger.error('Select image file (.jpeg, .tiff, etc.)')
+            print('Select image file (.jpeg, .tiff, etc.)')
     
     def get_data(self, index=0):
         if len(self.data_list) == 0:
+            print('List is empty, must add data')
             return
         else:
             return self.data_list[index]
@@ -57,11 +58,11 @@ class Data(Atom):
             print('bad path')
     
     def add_align_data(self, path=None, array=None):
-        try:
-            if path != None:
-                align_data = np.array(Image.open(path))
-                self.align_data = np.ma.copy(align_data)
-            if array != None:
-                self.align_data = np.ma.copy(array)
-        except:
+        #try:
+        if path != None:
+            align_data = np.array(Image.open(path))
+            self.align_data = np.ma.copy(align_data)
+        if isinstance(array) is not None:
+            self.align_data = np.ma.copy(array)
+        #except:
             print('bad path')

@@ -11,16 +11,25 @@ import os
 import numpy as np
 
 enamldef Dataio(DockItem): data_view:
+    # Passed in, DataListModel class from datamodel.py
     attr data_list
+    
+    # Passed in, PlotModel class from plotmodel.py
     attr plot
+
     attr path_list : list = ['']
     attr directory : str = ''
+    attr norm_path : str = ''
+    attr align_path : str = ''
     title = 'Data IO'
+    
     Container:
         constraints = [
             vbox(
                 hbox(single_file_button, single_file_field, single_file_plot),
-                hbox(directory_button, directory_field, directory_plot)
+                hbox(directory_button, directory_field, directory_plot),
+                hbox(norm_button, norm_field, norm_plots),
+                hbox(align_button, align_field, align_plots)
                 )
             
         ]
@@ -35,12 +44,17 @@ enamldef Dataio(DockItem): data_view:
         Field: single_file_field:
             read_only = True
             text << data_view.path_list[0]
-            
+        
         PushButton: single_file_plot:
             text = 'Plot Data'
             clicked ::
+                # Load selected data
                 for path in data_view.path_list:
                     data_list.add_data(path)
+                
+                # Only plot data if only one image of data in list
+                # Find out how to get slider (in image_view.enaml) 
+                # and this functionality to speak to one another
                 if data_list.length == 1:
                     index = len(data_list.data_list)-1
                     plot.plot(data_list.get_data(index).plot_data)
@@ -66,3 +80,36 @@ enamldef Dataio(DockItem): data_view:
                 except:
                     print('didnt work')
                 
+        PushButton: norm_button:
+            text = 'Normalization Data'
+            clicked ::
+                norm_path = FileDialogEx.get_open_file_name(data_view)
+                if norm_path:
+                    data_view.norm_path = norm_path
+            
+        Field: norm_field:
+            text << data_view.norm_path
+            
+        PushButton: norm_plots:
+            text = 'Set Norm Data'
+            clicked ::
+                if data_view.data_list.length > 0:
+                    for data in data_view.data_list.data_list:
+                        data.add_norm_data(path=data_view.norm_path)
+                        
+        PushButton: align_button:
+            text = 'Align Data'
+            clicked ::
+                align_path = FileDialogEx.get_open_file_name(data_view)
+                if align_path:
+                    data_view.align_path = align_path
+                    
+        Field: align_field:
+            text << data_view.align_path
+            
+        PushButton: align_plots:
+            text = 'Set Align Data'
+            clicked ::
+                if data_view.data_list.length > 0:
+                    for data in data_view.data_list.data_list:
+                        data.add_align_data(path=data_view.align_path)

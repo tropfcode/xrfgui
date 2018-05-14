@@ -1,3 +1,4 @@
+from . import model, view
 import logging
 logger = logging.getLogger()
 from logging import NullHandler
