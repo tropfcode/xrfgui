@@ -54,13 +54,24 @@ enamldef Image(DockItem): image_view:
                 CheckBox: make_norm_check:
                     text = 'Make Norm Data'
                     clicked ::
-                        if checked:
+                        if image_view.data_list.length == 0:
+                            print('Must plot data first')
+                            self.checked = False
+                        elif checked:
+                            array = data_list.get_data(slider.value-1).plot_data
                             if image_view.data_list.length == 0:
                                 print('Must plot data first')
                                 self.checked = False
+                            else:
+                                for data in image_view.data_list.data_list:
+                                    data.add_norm_data(array=array)
+                                    data.normed = True
+                                data_list.get_data(slider.value-1).is_norm = True
                         else:
+                            array = data_list.get_data(slider.value-1).plot_data
                             for data in image_view.data_list.data_list:
-                                data.add_align_data(array=data_list.get_data(slider.value-1).plot_data)
+                                data.normed = False
+                            array.is_norm = True
                             
                 CheckBox: make_align_check:
                     text = 'Make Align Data'

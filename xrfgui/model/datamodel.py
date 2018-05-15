@@ -24,7 +24,7 @@ class DataListModel(Atom):
             print('Select image file (.jpeg, .tiff, etc.)')
     
     def get_data(self, index=0):
-        if len(self.data_list) == 0:
+        if self.length == 0:
             print('List is empty, must add data')
             return
         else:
@@ -39,6 +39,10 @@ class Data(Atom):
     norm_data = Typed(np.ndarray)
     align_data = Typed(np.ndarray)
     file_name = Str()
+    is_norm = Bool()
+    is_align = Bool()
+    normed = Bool()
+    aligned = Bool()
     
     def __init__(self, raw_data, file_name):
         self.raw_data = raw_data
@@ -46,6 +50,10 @@ class Data(Atom):
         self.plot_data = np.ma.copy(raw_data)
         self.norm_data = np.ma.zeros((4,4))
         self.align_data = np.ma.zeros((4,4))
+        self.is_norm = False
+        self.is_align = False
+        self.normed = False
+        self.aligned = False
         
     def add_norm_data(self, path=None, array=None):
         try:
