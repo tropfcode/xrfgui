@@ -13,6 +13,8 @@ from model.plotmodel import PlotModel
 
 enamldef Image(DockItem): image_view:
     attr plot
+    
+    # Passed in, DataListModel class from datamodel.py
     attr data_list
     Container:   
         constraints = [
@@ -53,11 +55,12 @@ enamldef Image(DockItem): image_view:
                     text = 'Make Norm Data'
                     clicked ::
                         if checked:
-                            if image_view.data_list.length > 0:
-                                for data in image_view.data_list.data_list:
-                                    data.add_align_data(array=data_list.get_data(slider.value-1).plot_data)
+                            if image_view.data_list.length == 0:
+                                print('Must plot data first')
+                                self.checked = False
                         else:
-                            print('norm box not checked')
+                            for data in image_view.data_list.data_list:
+                                data.add_align_data(array=data_list.get_data(slider.value-1).plot_data)
                             
                 CheckBox: make_align_check:
                     text = 'Make Align Data'
