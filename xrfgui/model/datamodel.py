@@ -60,7 +60,7 @@ class Data(Atom):
             if path != None:
                 norm_data = np.array(Image.open(path))
                 self.norm_data = np.ma.masked_where(norm_data <= 0.0, norm_data)
-            if array != None:
+            if np.any(array) != None:
                 self.norm_data = np.ma.masked_where(array<=0.0, array)
         except:
             print('bad path')
