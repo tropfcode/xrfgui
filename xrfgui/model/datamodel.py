@@ -1,3 +1,4 @@
+import api
 import numpy as np
 import os
 from PIL import Image
@@ -74,3 +75,6 @@ class Data(Atom):
             self.align_data = np.ma.copy(array)
         #except:
             print('bad path')
+            
+    def norm_data(self):
+        self.plot_data = api.normalize(self.raw_data, self.norm_data)
